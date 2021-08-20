@@ -106,6 +106,13 @@ namespace KsWare {
 			const int SW_HIDE = 0;
 			const int SW_SHOW = 5;
 			var       handle  = GetConsoleWindow();
+			if (handle == IntPtr.Zero && show) {
+				AllocConsole();
+				handle = GetConsoleWindow();
+			}
+			if (handle == IntPtr.Zero) {
+				throw new InvalidOperationException("No console window available!");
+			}
 			ShowWindow(handle, show ? SW_SHOW : SW_HIDE);
 		}
 
@@ -129,6 +136,12 @@ namespace KsWare {
 		/// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
 		[DllImport("user32.dll")]
 		static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+		[DllImport("Kernel32")]
+		private static extern void AllocConsole();
+
+		[DllImport("Kernel32")]
+		private static extern void FreeConsole();
 
 		[DllImport("Kernel32")]
 		private static extern bool SetConsoleCtrlHandler(EventHandler handler, bool add);
