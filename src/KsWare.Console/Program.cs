@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace KsWare {
 
@@ -18,7 +16,7 @@ namespace KsWare {
 						case "":break;
 						case "exit": Environment.Exit(0); return;
 						case "help":
-							WriteLine("KsWare.Console v1.0", ConsoleColor.White);
+							WriteLine("KsWare.Console v"+GetVersion(), ConsoleColor.White);
 							WriteLine("EXIT		exits the console.",ConsoleColor.Green);
 							WriteLine("HELP		shows help text.", ConsoleColor.Green);
 							WriteLine("No plugins loads", ConsoleColor.DarkYellow);
@@ -29,6 +27,11 @@ namespace KsWare {
 					}
 				}
 			}
+
+			private static string GetVersion() =>
+				Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+					?.InformationalVersion;
+			
 
 			private static string GetPrompt() {
 				return Environment.CurrentDirectory + ">";

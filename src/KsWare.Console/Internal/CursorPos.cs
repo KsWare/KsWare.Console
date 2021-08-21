@@ -1,4 +1,4 @@
-﻿namespace KsWare {
+﻿namespace KsWare.Internal {
 
 	internal class CursorPos {
 		/// <summary>
