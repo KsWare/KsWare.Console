@@ -30,12 +30,12 @@ namespace KsWare {
 		static Console() {
 			Handler = ConsoleCtrlHandler;
 			ConsoleApi.SetConsoleCtrlHandler(Handler, true);
-			SystemEvents.SessionEnding += (s, e) => {
-				if (ConsoleCtrlHandler(e.Reason == SessionEndReasons.Logoff ? CTRL.LOGOFF_EVENT : CTRL.SHUTDOWN_EVENT))
-					e.Cancel = true;
-			};
-//			SystemEvents.SessionEnded += (s, e) =>
-//				ConsoleCtrlHandler(e.Reason == SessionEndReasons.Logoff ? CTRL.LOGOFF_EVENT : CTRL.SHUTDOWN_EVENT);
+			SystemEvents.SessionEnding += SystemEvents_SessionEnding;
+		}
+
+		private static void SystemEvents_SessionEnding(object s, SessionEndingEventArgs e) {
+			if /*cancel?*/ (ConsoleCtrlHandler(e.Reason == SessionEndReasons.Logoff ? CTRL.LOGOFF_EVENT : CTRL.SHUTDOWN_EVENT)) e.Cancel = true;
+			else SystemEvents.SessionEnding -= SystemEvents_SessionEnding;
 		}
 
 		/// <inheritdoc cref="System.Console.Write(string)"/>
